@@ -11,6 +11,7 @@
     <div class="container">
         <nav class="sidebar">
             <ul>
+                <!-- Existing menus -->
                 <li><a href="#" onclick="toggleMenu('course-menu')">Course</a>
                     <ul id="course-menu" class="submenu">
                         <li><a href="#" onclick="loadContent('course-list')">List Courses</a></li>
@@ -42,6 +43,16 @@
                 <li><a href="#" onclick="toggleMenu('book-menu')">Book</a>
                     <ul id="book-menu" class="submenu">
                         <li><a href="#" onclick="loadContent('book-list')">List Books</a></li>
+                    </ul>
+                </li>
+                <!-- New Math menu -->
+                <li><a href="#" onclick="toggleMenu('math-menu')">Math</a>
+                    <ul id="math-menu" class="submenu">
+                        <li><a href="#" onclick="loadContent('math-problems')">Math Problems</a></li>
+                        <li><a href="#" onclick="loadContent('equations')">Equations</a></li>
+                        <li><a href="#" onclick="loadContent('formulas')">Formulas</a></li>
+                        <li><a href="#" onclick="loadContent('concepts')">Concepts</a></li>
+                        <li><a href="#" onclick="loadContent('theorems')">Theorems</a></li>
                     </ul>
                 </li>
             </ul>

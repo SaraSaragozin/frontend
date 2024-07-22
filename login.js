@@ -19,38 +19,38 @@ document.addEventListener('DOMContentLoaded', () => {
         container.classList.remove('right-panel-active');
     });
 
-    // Handle Sign Up Form Submission
-    signupForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+// Handle Sign Up Form Submission
+signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
 
-        const username = document.getElementById('signup-username').value;
-        const password = document.getElementById('signup-password').value;
+    const username = document.getElementById('signup-username').value;
+    const password = document.getElementById('signup-password').value;
 
-        if (!username || !password) {
-            console.error('All fields are required');
-            return;
+    if (!username || !password) {
+        console.error('All fields are required');
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:5000/api/auth/register', { // Actualiza la URL
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Error creating user');
         }
 
-        try {
-            const response = await fetch('http://localhost:3000/api/users', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ username, password }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Error creating user');
-            }
-
-            alert('User created successfully');
-            window.location.href = 'index.html';  // Redirect to index.html after successful signup
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Error creating user');
-        }
-    });
+        alert('User created successfully');
+        window.location.href = 'index.html';  // Redirect to index.html after successful signup
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error creating user');
+    }
+});
 
     // Handle Sign In Form Submission
     signinForm.addEventListener('submit', async (e) => {

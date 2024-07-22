@@ -3,48 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In/Sign Up</title>
+    <title>Education Platform</title>
     <link rel="stylesheet" href="/frontend/styles/style.css">
+    <script src="login.js" defer></script>
 </head>
 <body>
-    <div class="container" id="container">
-        <!-- Formulario de registro -->
+    <div id="container" class="container">
+        <!-- Sign In / Sign Up Forms -->
         <div class="form-container sign-up-container">
             <form id="signup-form">
                 <h1>Create Account</h1>
-                <span>or use your email for registration</span>
-                <input type="text" id="signup-username" placeholder="Username" />
-                <input type="password" id="signup-password" placeholder="Password" />
+                <input type="text" id="signup-username" placeholder="Username" required />
+                <input type="password" id="signup-password" placeholder="Password" required />
                 <button type="submit">Sign Up</button>
+                <p>Already have an account? <a href="#" id="switch-to-signin">Sign In</a></p>
             </form>
         </div>
-
-        <!-- Formulario de inicio de sesión -->
         <div class="form-container sign-in-container">
             <form id="signin-form">
-                <span>use your account</span>
-                <input type="username" id="signin-username" placeholder="username" />
-                <input type="password" id="signin-password" placeholder="Password" 
+                <h1>Sign In</h1>
+                <input type="text" id="signin-username" placeholder="Username" required />
+                <input type="password" id="signin-password" placeholder="Password" required />
                 <button type="submit">Sign In</button>
+                <p>Don't have an account? <a href="#" id="switch-to-signup">Sign Up</a></p>
             </form>
         </div>
 
-        <!-- Panel de sobreimpresión -->
+        <!-- Overlay for Form Transition -->
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
                     <h1>Welcome Back!</h1>
                     <p>To keep connected with us please login with your personal info</p>
-                    <button class="ghost" id="signIn">Sign In</button>
+                    <button class="ghost" id="show-signin">Sign In</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Hello, Friend!</h1>
-                    <p>Enter your personal details and start journey with us</p>
-                    <button class="ghost" id="signUp">Sign Up</button>
+                    <p>Enter your personal details and start your journey with us</p>
+                    <button class="ghost" id="show-signup">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
-    <script src="login.js"></script>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Education Platform. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript to handle form switching
+        document.getElementById('switch-to-signup').addEventListener('click', () => {
+            document.getElementById('container').classList.add('right-panel-active');
+        });
+        document.getElementById('switch-to-signin').addEventListener('click', () => {
+            document.getElementById('container').classList.remove('right-panel-active');
+        });
+
+        // JavaScript to handle form submission
+        document.getElementById('signup-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/users', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error creating user');
+                }
+
+                alert('User created successfully');
+                document.getElementById('container').classList.remove('right-panel-active');
+            } catch (error) {
+                console.error('Error creating user:', error);
+                alert('Error creating user');
+            }
+        });
+
+        document.getElementById('signin-form').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const username = document.getElementById('signin-username').value;
+            const password = document.getElementById('signin-password').value;
+
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Invalid credentials');
+                }
+
+                const data = await response.json();
+                localStorage.setItem('token', data.token);  // Store the token in localStorage
+                window.location.href = 'home.html';  // Redirect to home.html after successful login
+            } catch (error) {
+                console.error('Error logging in:', error);
+                alert('Error logging in');
+            }
+        });
+    </script>
 </body>
 </html>
